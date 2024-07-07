@@ -1,4 +1,10 @@
+# Python specific
 venv/
 __pycache__/
 *.pyc
-.DS_Store
+
+# Test and coverage reports
+*.log
+*.coverage
+htmlcov/
+*.xml

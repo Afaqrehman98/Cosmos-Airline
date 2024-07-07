@@ -14,16 +14,12 @@ def get_flight_info():
     if not flight_data:
         return jsonify({'error': 'Failed to fetch flight schedules data from external API'}), 500
 
-    # Process flight data
     flights_info = Flight.process_flight_data(flight_data, destination, airlines)
 
-    # Now fetch delay data
     delay_data = fetch_data(DELAYS_URL)
     if not delay_data:
         return jsonify({'error': 'Failed to fetch flight delays data from external API'}), 500
 
-    # Add delay info to flights
     Flight.add_delays_to_flights(flights_info, delay_data)
 
     return jsonify(flights_info)
-
