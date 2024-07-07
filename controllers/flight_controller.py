@@ -1,25 +1,16 @@
-from flask import Blueprint, jsonify, request
 from models.flight_model import Flight
 from utils.fetch_data import fetch_data
 from config import SCHEDULES_URL, DELAYS_URL
 
-flight_bp = Blueprint('flight_bp', __name__)
 
-@flight_bp.route('/get_flight_info', methods=['GET'])
-def get_flight_info():
-    destination = request.args.get('destination')
-    airlines = request.args.getlist('airlines')
-
+def get_flight_info_controller(destination, airlines):
     flight_data = fetch_data(SCHEDULES_URL)
     if not flight_data:
-        return jsonify({'error': 'Failed to fetch flight schedules data from external API'}), 500
-
-    flights_info = Flight.process_flight_data(flight_data, destination, airlines)
+        return {'error': 'Failed to fetch flight schedules data from external API'}, 500
 
     delay_data = fetch_data(DELAYS_URL)
     if not delay_data:
-        return jsonify({'error': 'Failed to fetch flight delays data from external API'}), 500
+        return {'error': 'Failed to fetch flight delays data from external API'}, 500
 
-    Flight.add_delays_to_flights(flights_info, delay_data)
-
-    return jsonify(flights_info)
+    flights_info = Flight.process_flight_data(flight_data, delay_data, destination, airlines)
+    return flights_info
