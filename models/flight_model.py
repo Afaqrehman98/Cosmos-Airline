@@ -6,32 +6,27 @@ class Flight:
         flights_info = []
         seen_flights = set()
 
-        for flight in flight_data.get('FlightStatusResource', {}).get('Flights', {}).get('Flight', []):
-            departure = flight.get('Departure', {})
-            arrival = flight.get('Arrival', {})
-            marketing_carrier = flight.get('MarketingCarrier', {})
+        flights = flight_data.get('FlightStatusResource', {}).get('Flights', {}).get('Flight', [])
+        for flight in flights:
+            if not Flight.is_valid_flight(flight, destination, airlines, seen_flights):
+                continue
 
-            flight_code = f"{marketing_carrier.get('AirlineID', '')}{marketing_carrier.get('FlightNumber', '')}"
+            flight_id = str(uuid.uuid4())
+            flight_code = f"{flight['MarketingCarrier']['AirlineID']}{flight['MarketingCarrier']['FlightNumber']}"
+            delays_info = Flight.get_delays_for_flight(flight_code, delay_data)
 
-            if (not destination or arrival.get('AirportCode') == destination) and \
-               (not airlines or marketing_carrier.get('AirlineID') in airlines) and \
-               flight_code not in seen_flights:
+            flights_info.append({
+                'id': flight_id,
+                'flight_number': flight['MarketingCarrier'].get('FlightNumber', 'N/A'),
+                'airline': flight['MarketingCarrier'].get('AirlineID', 'N/A'),
+                'origin': flight['Departure'].get('AirportCode', 'N/A'),
+                'destination': flight['Arrival'].get('AirportCode', 'N/A'),
+                'scheduled_departure_at': flight['Departure'].get('ScheduledTimeLocal', {}).get('DateTime', 'N/A'),
+                'actual_departure_at': flight['Departure'].get('ActualTimeLocal', {}).get('DateTime', 'N/A'),
+                'delays': delays_info if delays_info else [{'code': 'N/A', 'time_minutes': 'N/A', 'description': 'N/A'}]
+            })
 
-                flight_id = str(uuid.uuid4())
-                delays_info = Flight.get_delays_for_flight(flight_code, delay_data)
-
-                flights_info.append({
-                    'id': flight_id,
-                    'flight_number': marketing_carrier.get('FlightNumber', 'N/A'),
-                    'airline': marketing_carrier.get('AirlineID', 'N/A'),
-                    'origin': departure.get('AirportCode', 'N/A'),
-                    'destination': arrival.get('AirportCode', 'N/A'),
-                    'scheduled_departure_at': departure.get('ScheduledTimeLocal', {}).get('DateTime', 'N/A'),
-                    'actual_departure_at': departure.get('ActualTimeLocal', {}).get('DateTime', 'N/A'),
-                    'delays': delays_info if delays_info else [{'code': 'N/A', 'time_minutes': 'N/A', 'description': 'N/A'}]
-                })
-
-                seen_flights.add(flight_code)
+            seen_flights.add(flight_code)
 
         for flight in flights_info:
             flight['delays'] = sorted(flight['delays'], key=lambda x: x['code'])
@@ -39,29 +34,58 @@ class Flight:
         return flights_info
 
     @staticmethod
+    def is_valid_flight(flight, destination, airlines, seen_flights):
+        arrival = flight.get('Arrival', {})
+        marketing_carrier = flight.get('MarketingCarrier', {})
+        flight_code = f"{marketing_carrier.get('AirlineID', '')}{marketing_carrier.get('FlightNumber', '')}"
+
+        return (not destination or arrival.get('AirportCode') == destination) and \
+               (not airlines or marketing_carrier.get('AirlineID') in airlines) and \
+               flight_code not in seen_flights
+
+    @staticmethod
     def get_delays_for_flight(flight_code, delay_data):
         delays_info = []
 
         for delay in delay_data:
-            operating_flight = delay.get('Flight', {}).get('OperatingFlight', {})
-            current_flight_code = f"{operating_flight.get('Airline', '')}{operating_flight.get('Number', '')}"
+            if Flight.matching_flight_code(delay, flight_code):
+                delays_info.extend(Flight.extract_delays(delay))
 
-            if current_flight_code == flight_code:
-                flight_legs = delay.get('FlightLegs', [])
-                if flight_legs:
-                    for flight_leg in flight_legs:
-                        departure_leg = flight_leg.get('Departure')
-                        if departure_leg:
-                            for code_num in range(1, 5):
-                                delay_code_obj = departure_leg.get('Delay', {}).get(f'Code{code_num}')
-                                if delay_code_obj:
-                                    delay_code = delay_code_obj.get('Code', 'N/A')
-                                    delay_time = delay_code_obj.get('DelayTime', 'N/A')
-                                    delay_desc = delay_code_obj.get('Description', 'N/A')
-                                    if delay_code != 'N/A':
-                                        delays_info.append({
-                                            'code': delay_code,
-                                            'time_minutes': delay_time,
-                                            'description': delay_desc if delay_desc else 'N/A'
-                                        })
+        return delays_info
+
+    @staticmethod
+    def matching_flight_code(delay, flight_code):
+        operating_flight = delay.get('Flight', {}).get('OperatingFlight', {})
+        current_flight_code = f"{operating_flight.get('Airline', '')}{operating_flight.get('Number', '')}"
+        return current_flight_code == flight_code
+
+    @staticmethod
+    def extract_delays(delay):
+        delays_info = []
+        flight_legs = delay.get('FlightLegs', [])
+
+        for flight_leg in flight_legs:
+            departure_leg = flight_leg.get('Departure')
+            if departure_leg:
+                delays_info.extend(Flight.extract_delay_codes(departure_leg))
+
+        return delays_info
+
+    @staticmethod
+    def extract_delay_codes(departure_leg):
+        delays = departure_leg.get('Delay', {})
+        delays_info = []
+
+        for key, delay_code_obj in delays.items():
+            if not delay_code_obj: 
+                continue
+
+            delay_code = delay_code_obj.get('Code', 'N/A')
+            if delay_code != 'N/A':
+                delays_info.append({
+                    'code': delay_code,
+                    'time_minutes': delay_code_obj.get('DelayTime', 'N/A'),
+                    'description': delay_code_obj.get('Description', 'N/A') if delay_code_obj.get('Description') else 'N/A'
+                })
+
         return delays_info
