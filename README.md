@@ -16,15 +16,15 @@ Follow these steps to set up and run the Cosmos Flight Service locally:
    git clone https://github.com/Afaqrehman98/Cosmos-Airline
    cd cosmos-flight-service
 
-### Step 2: 2. Create and Activate Virtual Environment:
+### Step 2: Create and Activate Virtual Environment:
    ```
    python -m venv venv
-
-# On Windows
-
-venv\Scripts\activate
-
-# On macOS/Linux
-
-source venv/bin/activate
-
+   ```
+- On Windows
+   ```
+   venv\Scripts\activate
+   ```
+- On macOS/Linux
+    ```
+    source venv/bin/activate
+    ```
