@@ -42,7 +42,8 @@ Follow these steps to set up and run the Cosmos Flight Service locally:
 
 ## Port Information
 
-The application runs on port 5000 by default. Access it at http://localhost:5000.
+The application runs on port 5000 by default. 
+Access it at [http://127.0.0.1:5000/get_flight_info?].
 
 
 ## Libraries Used
@@ -62,6 +63,11 @@ The application runs on port 5000 by default. Access it at http://localhost:5000
 
 ### Missing Parameters
 
-### Contributing
 
+## Contributing
+Contributions are welcome! Please fork the repository and submit a pull request.
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
     
