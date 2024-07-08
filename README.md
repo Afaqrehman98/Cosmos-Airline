@@ -57,6 +57,7 @@ Access it at [http://127.0.0.1:5000/get_flight_info?].
 ## Screenshots of Testing via Postman
 
 ### Successful Request:
+![WhatsApp Image 2024-07-07 at 23 00 40](https://github.com/Afaqrehman98/Cosmos-Airline/assets/62624461/92fd5828-3a98-4bd9-ba49-a2c904152128)
 
 
 ### Invalid Destination
