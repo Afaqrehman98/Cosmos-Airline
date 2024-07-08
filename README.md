@@ -32,7 +32,7 @@ Follow these steps to set up and run the Cosmos Flight Service locally:
 ### Step 3: Install Dependencies:
    ```
    pip install -r requirements.txt
-   ```![WhatsApp Image 2024-07-07 at 23 00 40](https://github.com/Afaqrehman98/Cosmos-Airline/assets/62624461/13ce20a8-17c5-4494-a040-5ae7ae293872)
+   ```
 
 
 ### Step 4: Run the Application:
