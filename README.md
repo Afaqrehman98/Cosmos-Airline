@@ -14,7 +14,7 @@ Follow these steps to set up and run the Cosmos Flight Service locally:
 - Run the following commands:
   ```
   git clone https://github.com/Afaqrehman98/Cosmos-Airline
-  cd cosmos-flight-service
+  cd Cosmos-Airline
   ```
 
 ### Step 2: Create and Activate Virtual Environment:
