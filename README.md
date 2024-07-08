@@ -28,3 +28,26 @@ Follow these steps to set up and run the Cosmos Flight Service locally:
     ```
     source venv/bin/activate
     ```
+
+### Step 3: Install Dependencies:
+   ```
+   pip install -r requirements.txt
+   ```
+
+### Step 4: Run the Application:
+   ```
+   python app.py
+   ```
+
+## Port Information
+
+The application runs on port 5000 by default. Access it at http://localhost:5000.
+
+
+## Libraries Used
+
+Flask: Micro web framework for Python
+Flask-CORS: Flask extension for handling Cross-Origin Resource Sharing
+requests: HTTP library for making requests to external APIs
+unittest2: Library for writing unit tests
+    
