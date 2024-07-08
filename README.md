@@ -57,15 +57,23 @@ Access it at [http://127.0.0.1:5000/get_flight_info?].
 ## Screenshots of Testing via Postman
 
 ### Successful Request:
-![WhatsApp Image 2024-07-07 at 23 00 40](https://github.com/Afaqrehman98/Cosmos-Airline/assets/62624461/92fd5828-3a98-4bd9-ba49-a2c904152128)
+   #### With Airline & Destination as a Parameter:
+   ![API-Success-Destination-Airline](https://github.com/Afaqrehman98/Cosmos-Airline/assets/62624461/db20a4c4-9dc4-4eec-a762-bf5de24430b9)
 
+   #### With Destination as a Parameter:
+   ![API-Success-Destination](https://github.com/Afaqrehman98/Cosmos-Airline/assets/62624461/ec931b65-a7bc-4a0d-acf1-df2849c386eb)
 
-### Invalid Destination
+   #### Multiple Airlines as Destination as a Parameter:
+   ![API-Success-Multiple-Airline](https://github.com/Afaqrehman98/Cosmos-Airline/assets/62624461/fc2b2ed7-a2a0-47a2-b986-1c8a7bed9e4b)
 
-### Missing Parameters
+### Empty Parameters
+![API-Error-No-Parameters](https://github.com/Afaqrehman98/Cosmos-Airline/assets/62624461/7b64b43d-56d3-4330-b0f1-23384d6fee66)
 
+### Destination with less than 3 characters:
+![API-Error-Destination-Less-Character](https://github.com/Afaqrehman98/Cosmos-Airline/assets/62624461/4a13c255-da10-4acf-9b60-84f9b89533b0)
 
 ## Contributing
+
 Contributions are welcome! Please fork the repository and submit a pull request.
 
 ## License
