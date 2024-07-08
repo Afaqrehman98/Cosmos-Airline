@@ -57,13 +57,13 @@ Access it at [http://127.0.0.1:5000/get_flight_info?].
 ## Screenshots of Testing via Postman
 
 ### Successful Request:
-   #### With Airline & Destination as a Parameter:
+   - **With Airline & Destination as a Parameter:** 
    ![API-Success-Destination-Airline](https://github.com/Afaqrehman98/Cosmos-Airline/assets/62624461/db20a4c4-9dc4-4eec-a762-bf5de24430b9)
 
-   #### With Destination as a Parameter:
+   - **With Destination as a Parameter:**
    ![API-Success-Destination](https://github.com/Afaqrehman98/Cosmos-Airline/assets/62624461/ec931b65-a7bc-4a0d-acf1-df2849c386eb)
 
-   #### Multiple Airlines as Destination as a Parameter:
+   - **Multiple Airlines as Destination as a Parameter:**
    ![API-Success-Multiple-Airline](https://github.com/Afaqrehman98/Cosmos-Airline/assets/62624461/fc2b2ed7-a2a0-47a2-b986-1c8a7bed9e4b)
 
 ### Empty Parameters
